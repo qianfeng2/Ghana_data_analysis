@@ -1,0 +1,312 @@
+#File containing maximum accuracy alignment for each sequences
+#Input parameters = /vlsci/SG0011/qian-feng/MZmosaic/mosaic -ma -seq ../Protein_translateable_pilot_upper_centroids_run244.fasta -aa -tag ../Protein_translateable_pilot_upper_centroids_run244.fasta -group 2 db target -target target -del 0.00806934718714 -eps 0.2283998284 -rec 0.015 
+#Created on Wed Aug  1 04:06:47 2018
+
+
+Target: target_seq7294	Length: 111	Llk: -74.010
+target_seq7294	DIGDIVRGKDLFLGHQQRKKKLEERLEAMFENIQKNNPKLINLKPEQLREYWWELNRQEIWKAMICKAPGNAQYFRNTCGGGKNASATQGKCRCATNDVPTYFDYVPQHLR
+          	|||||||| ||||||||||| ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| ||
+ db_seq248	DIGDIVRGRDLFLGHQQRKKYLEERLEAMFENIQKNNPKLINLKPEQLREYWWELNRQEIWKAMICKAPGNAQYFRNTCGGGKNASATQGKCRCA
+db_seq6393	                                                                                               TNDVPTYFDYVPQFLR
+
+
+Target: target_seq7295	Length: 129	Llk: -115.483
+target_seq7295	DIGDIVRGKDLFLGYNKSDQKEKKQLQQNLKDIFAKIYNSLKDIEAQARYNDDT-GDFFQLREDWWTVNRDQVWKALTCEAPKNSQYFRQTCGSGKTAIRTPNKCRCDGAKSANANQVPTYFDYVPQYLR
+          	||||||||||||||||||||||||||||||||||||||||||||||||||||| ~ ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+db_seq14323	DIGDIVRGKDLFLGYNKSDQKEKKQLQQNLKDIFAKIYNSLKDIEAQARYNDDKNNDFF
+db_seq12726	                                                           QLREDWWTVNRDQVWKALTCEAPKNSQYF
+db_seq9212	                                                                                        RQTCGSGKTAIRTPNKCRC
+db_seq14082	                                                                                                           DGAKSANANQVPTYFDYVPQYLR
+
+
+Target: target_seq7317	Length: 121	Llk: -105.974
+target_seq7317	DIGDIIRGKDLYRGNNGKDKLEENLRKIFKKIYDKLDGKKKGKEAKDHYKDDGPNYYQLREDWWNNNRLMVWYAITCGVKGNKYFRQTCGDENDPTPTNEKCRCVIGGVPTYFDYVPQYLR
+          	|||||||||||||||||||||||||||||| ||||||||||||||||||||||||||||||||||||| ||||||||||||||||||||||||||||||||||||||||||||||||||||
+db_seq2489	DIGDIIRGKDLYRGNNG
+db_seq7053	                 KDKLEENLRKIFKQIYDKLDGKKKGKEAK
+db_seq6693	                                              DHYKDDGPNYY
+db_seq7814	                                                         QLREDWWNNNRKMVWYAITCGVKGNKYFRQTCGDENDPTPTNEKCRCVIGGVPTYFDYVPQYLR
+
+
+Target: target_seq7316	Length: 134	Llk: -100.161
+target_seq7316	DIGDIIRGKDLFIGYDKKDREQKKKIQDNLKDIFAKIYNNLMEHLKEDPTKKVEAEKRYKKDEDDGGNYFQLREDWWDANRKKVWDAITCKAERDDKYFRKTACAGKTPTEGRCRCAANIDPPTYFDYVPQYLR
+          	||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||   |||||||||||||||||||||||||||||||||||||||
+db_seq12614	DIGDIIRGKDLFIGYDKKDREQKKKIQDNL
+db_seq17278	                              KDIFAKIYNNLMEHLKEDPTKKVEAEKRYKKDEDDGGNYFQLRE
+db_seq3786	                                                                          DWWDANRKKVWDAITCKANDGDKYFRKTACAGKTPTEGRCRCAANIDPPTYFDYVPQYLR
+
+
+Target: target_seq7315	Length: 130	Llk: -73.534
+target_seq7315	DIGDIVRGKDMYVGYDEKEKNRRKQLENKLKDIFGNIYKDLTKKKGRNGKNREIETRYENDGPNYYQLREDWWALNREDVWRAITCNAPDKAEYFVYKSGSLLNFSSDRCGHNNNDGPLTNLDYVPQFLR
+          	||||| ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+   db_seq5	DIGDIIRGKDMYVGYDEKEKNRRKQLENKLKDIFGNIYKDLTKKKGRNGKNREIETRYENDGPNYYQLREDWWALNREDVWRAITCNAPDKAEYFVYKSGSL
+db_seq12795	                                                                                                      LNFSSDRCGHNNNDGPLTNLDYVPQFLR
+
+
+Target: target_seq7314	Length: 116	Llk: -71.243
+target_seq7314	DIGDIIRGKDLYRGNNGKDKLENNLKKIFKKIQEKLIGDAKTHYEDGSGNFFKLREDWWYANRRQVWKAIRCGAPDDANYFIKTVCSGGKTPTQGKCRCIDFSVPTYFDYVPQYLR
+          	||||||||||||||||||||||||||||||||||||||||| ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+db_seq15586	DIGDIIRGKDLYRGNNGKDKLENNLKKIFKKIQEKLIGDAKNHYEDGSGNFFKLREDWWYANRRQVWKAIRCGAPDDANYF
+db_seq8778	                                                                                 IKTVCSGGKTPTQGKCRCIDFSVPTYFDYVPQYLR
+
+
+Target: target_seq7313	Length: 121	Llk: -90.281
+target_seq7313	DIGDIIRGKDLYIRNKREKKRLEENLKTIFGKIHSDVTKSGNNKDALKARYDGDTENYYKLREDWWNNNRKMVWRAITCGAAGGTYFHATCGSAKTQTNNKCRCTTHDVPTYFDYVPQFLR
+          	|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| ||  |||||  |||||||||||||
+db_seq5251	DIGDIIRGKDLYIRNKREKKRLEENLKTIFGKIHSDVTKSGNNKDALKARYDGDTENYYKLREDWWNNNRKMVWRAIT
+db_seq5015	                                                                              CGAAGGTYFHATCGSAKTPTNKQCRCTTRVVPTYFDYVPQFLR
+
+
+Target: target_seq7312	Length: 123	Llk: -92.356
+target_seq7312	DIGDIIRGKDLYLGNDKEKLILQEKLKEYFQIIYEKVDEKNVGAKEHYKEDKETGNYYQLREDWWNANRQQVWKAITCGAGQNDKYFRHTCGAGNDRTETKNNCQCISGDPPTYFDYVPQFLR
+          	|||||||||||||||||||||||||||||||||||| |||||||||||| |^^| ||||||||||  ||||||||||||||||||||||||||||||||||||||||||||||||||||| ||
+db_seq16299	DIGDIIRGKDLYLGNDKEKLILQEKLKEYFQIIYEKLDEKNVGAKEHYKGD--TTNYYQLREDWWALNRQQVWKAITCGAGQNDKYFRHTCGAGNDRTETKNNCQCISGDPPTYFDYVPQYLR
+
+
+Target: target_seq7311	Length: 136	Llk: -95.624
+target_seq7311	DIGDIIRGKDLFYGNTQESAQRKKLDDKLKEIFKEIHDEVTKGRSASPLQARYQGDDNNNYSKLRKDWWTANRETVWKALTCDAPGDASYFHATCSDSSDKKGPSMAKNNCRCDGR-NGTNADQVPTYFDYVPQYLR
+          	|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||  |||||||||||||||||||||| ~ |||||||||||||||||||
+db_seq2710	DIGDIIRGKDLFYGNTQESAQRKKLDDKLKEIFKEIHDEVTKGRSASPLQARYQGDDNNNYSKLRKDWWTANRETVWKALTCDAPGDASYFRTTCS
+db_seq3772	                                                                                                DSSDKKGPSMAKNNCRCDGKKPGTNADQVPTYFDYVPQYLR
+
+
+Target: target_seq7310	Length: 111	Llk: -73.315
+target_seq7310	DIGDIIRGKDLYLGHEQGNNKLEARLKTIFENIWNKNNVPLHNLSLDKFREYWWALNRDQVWNAITCGATMNDIFSKNIGDAKMILFDYNCGHHKDNNVPTNLDYVPQHLR
+          	|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| ||
+db_seq14517	DIGDIIRGKDLYLGHEQGNNKLEARLKTIFENIWNKNNVPLHNLSLDKFREYWWALNRDQVW
+db_seq15482	                                                              NAITCGAT
+db_seq10631	                                                                      MNDIFSKNIGDAKMILFDYNCGHHKDNNVPTNLDYVPQFLR
+
+
+Target: target_seq7319	Length: 123	Llk: -88.025
+target_seq7319	DIGDIVRGKDLYLGGNKKEKNRRDDLEENLKKIFEKIKGNNNSKLSTLEDDQIREYWWALNREDVWKALTCGTHGGDTYFRPTCGGDSGSPSMARDKCRCKDEKGKNTDQVPTYFDYVPQYLR
+          	|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| ||||||||||||||||||||||||||||||||||||||||||||||||
+db_seq9038	DIGDIVRGKDLYLGGNKKEKNRRDDLEENLKKIFEKIKGNNNSKLSTLEDDQIREYWWALNREDVWKALTC
+db_seq13735	                                                                       GTHDGDTYFRPTCGGDSGSPSMARDKCRC
+db_seq3626	                                                                                                    KDEKGKNTDQVPTYFDYVPQYLR
+
+
+Target: target_seq7318	Length: 140	Llk: -100.749
+target_seq7318	DIGDIVRGKDLYSGNNKEKEQRKKLENKLKEYFEKIYNELTNGELKTRYKDKNGGNFFKLREDWWTANRHTVWEAMTCSDKLANYKYFRATCSDSGDGKGPSQARKQCRCPKTSDDKAIKAGGNVSIVPTYFDYVPQFLR
+          	||||| || |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+db_seq3073	DIGDIIRGRDLYSGNNKEKEQRKKLENKLKEYFEKIYNELTNG
+db_seq1523	                                           E
+db_seq6922	                                            LKTRYKDKNGGNFFK
+db_seq16619	                                                           LREDWWTANRHTVWEAMTCSDKLANYKYFRATCSDSGDGKGPSQARKQCRCPKTSDDKAIKAGGNVSIVPTYFDYVPQFLR
+
+
+Target: target_seq7304	Length: 136	Llk: -113.395
+target_seq7304	DIGDIVRGRDLFLGNTYESTQRKKLDDNLKTIFKQIHGGLKGGAEARYGNDPKENYYQLREDWWTANRETVWKALTCNAGGGTYFRHTCGTGKDRTATNNNCRCGDGKPKAGKPKAGNGDVNIVPTYFDYVPQYLR
+          	|||||||| | | ||||||||||||||||||||||||||||||||||||||||||||||||||| ||||||||||||||||||||||||||||||||||||||| |||||||||||||||| ||||||||||||||
+db_seq5613	DIGDIVRGKDPFYGNTYESTQRKKLDDNLKTIFKQIHGGLKGGAEARYGNDPKENYYQLREDWW
+db_seq9935	                                                                DANRETVWKALTCNAGGGTYFRHTCGTGKDRTATNNNCRC
+db_seq9700	                                                                                                        DDGKPKAGKPKAGNGDVSIVPTYFDYVPQYLR
+
+
+Target: target_seq7305	Length: 125	Llk: -105.438
+target_seq7305	DIGDIVRGRDLFYGNTPESAQRKVLDENLKTIFGHIYEELKNKEGAETRYKKDDDPDFLKLREDWWTANRHTVWEALTCDDDNRLAGASYFRTTCSGGNLTYNKCRCDGANIVPTYFDYVPQYLR
+          	|||||||||||||||||||||||||||||||||||||||||||||||||||||||| | ||||||||||| |||||||||||||||||||||||| |||||||||||||||||||||||||||||
+db_seq11965	DIGDIVRGRDLFYGNTPESAQRKVLDENLKTIFGHIYEELKNKEGAETRYKKDDDPEFFKLREDWWTANRETVW
+db_seq7900	                                                                          EALTCDDDNRLAGASYFRTTC
+db_seq6892	                                                                                               GGGNLTYNKCRCDGANIVPTYFDYVPQYLR
+
+
+Target: target_seq7306	Length: 121	Llk: -121.331
+target_seq7306	DIGDIVRGKDLYRRDNKKDKLQEQLKEYFKNIYDNLNGAQKHYSDDDKGTKNYYQLREDWWALNRQEVWYAITCGAGSGTYFRPTCNSGGDENTATRTPNQCRCKDDQVPTYFDYVPQYLR
+          	||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||  ||  |||||||||||||||||||||||||||||
+db_seq14452	DIGDIVRGKDLYRRDNKKDKLQE
+db_seq11915	                       QLKEYFKNIYDNLNGAQKHYSDDDKGTKNYYQLREDWWALN
+db_seq16914	                                                                RQEVWYAITCGAGSGTYFRPTCGGGGGKN
+db_seq17164	                                                                                             TATRTPNQCRCKDDQVPTYFDYVPQYLR
+
+
+Target: target_seq7307	Length: 130	Llk: -122.333
+target_seq7307	DIGDIIRGKDPFYGNTYESAQRDQLDKKLKEVFGKIHGGLSEEAQKRYNDPKENFYQLREDWWTANRATIWEALTCDVKGNTYFRATCNGEERTKGYCRCEGAKGAKDGKGSGNVNIVRTYFDYVPQYLR
+          	||||| ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| || ||||||||||||||| |||    ||||||||||||||||||||||
+db_seq15680	DIGDIVRGKDPFYGNTYESAQRDQLDKKLKEVFGKIHGGLSEEAQKR
+ db_seq381	                                               YNDPKENFYQLREDWWTANRATIW
+db_seq2768	                                                                       EALTCDVKGNRYFLATCNGEERTKGYCRCDGAKSVNAGKGSGNVNIVRTYFDYVPQYLR
+
+
+Target: target_seq7296	Length: 132	Llk: -75.051
+target_seq7296	DIGDIVRGRDLFYGNPQESAQREQLEKNLKTIFGHIYKDVTSTNDQTKKPALQKRYNDTTDYFQLREDWWNANRATVWEAITCNAQGNTYFQTTCSDGNSQSQATKQCRCPKTSDNVSIVPTYFDYVPQYLR
+          	||||||||||||||||||||||||||||||||||||||||||||||||||||| ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+db_seq5752	DIGDIVRGRDLFYGNPQESAQREQLEKNLKTIFGHIYKDVTSTNDQTKKPALQERYNDTTDYFQLR
+db_seq16032	                                                                  EDWWNANRATVWEAITCNAQGNTYFQTTCSDGNSQSQATKQCRCPKTSDNVSIVPTYFDYVPQYLR
+
+
+Target: target_seq7297	Length: 141	Llk: -142.553
+target_seq7297	DIGDIVRGKDLFRGNDEEKKQRKQLDKKLKVIFGKIYKDVTTNGRNDKKQSLQERYQDDREKNYFQLREDWWYANRETVWKAITCGADAGNKYFRATCGGDNEKNSTLASNKCRCDGAKGAKAGDVNIVPTYFDYVPQYLR
+          	|||||||||||| ||||||||||||||||||||||||||||||||||||||||||| ||||||| ||||||| ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+db_seq6897	DIGDIVRGKDLFLGNDEEKKQRKQLDKKLKVIFGKIYK
+db_seq15703	                                      DVTTNGRNDKKQSLQERYKDDREKNYYQLREDWWTANRETVWK
+db_seq5134	                                                                                 AITCGADAGNKYFRATC
+db_seq8724	                                                                                                  GGDNEKNSTLASNKCRCDGAK
+db_seq15817	                                                                                                                       GAKAGDVNIVPTYFDYVPQYLR
+
+
+Target: target_seq7302	Length: 132	Llk: -107.743
+target_seq7302	DIGDIVRGKDLFYGNKQEKEKRDELDKKLKEVFGKIHSEVTNGRNGELQEHYIKDKETGNYSKLREDWWTANRHTVWEAITCDVHGSDYFRPTCGDKENTATRVKDKCRCDGRNGANVDPPTYFDYVPQFLR
+          	||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+db_seq12160	DIGDIVRGKDLFYGNKQEKEKRDELDKKLKEVF
+db_seq10695	                                 GKIHSEVTNGRNGELQE
+db_seq1619	                                                  HYIKDKETGNYFKLREDWWTANRHT
+db_seq10994	                                                                           VWEAITCDVHGSDYFRPTCGDKENTATRVKDKCRCDGRNGANVDPPTYFDYVPQFLR
+
+
+Target: target_seq7303	Length: 129	Llk: -82.015
+target_seq7303	DIGDIVRGRDLYRGNDKEKVKLEKKLKKIFKKIYKDLKNGKKGAQKRYKDDTTDFFQLREDWWTANRATVWKAITCNADHGNRYFRKTCGDDSGTLSHASNKCRCRSKNLKEETDQVPTYFDYVPQYLR
+          	|||||||| ||||||||||||||||||||| ||||||||||||||||||||||||||||||||  ||  ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+db_seq6833	DIGDIVRGSDLYRGNDKEKVKLEKKLKKIFGKIYKDLKNGKKGAQKRYKDDTTDFFQLREDWWALNRNDVWKAITCNADHGNRYFRKTCGDDSGTLSHASNKCRCRSKNLKEETDQVPTYFDYVPQYLR
+
+
+Target: target_seq7298	Length: 142	Llk: -130.898
+target_seq7298	DIGDIVRGRDLYFGKRKKKKQYGKETERDELESKLKEIFKKIH-ED-LFQNKKDAKDHYEGDEANDFFKLREDWWTANRATIWEAITCNAQGNTYFHATCSM-NGSCSQATKQCRCGDGKSKAGKTSDNVSIVPTYFDYVPQYLR
+          	||||||||||||||||||||| |||||||||||||||||||||~||~| |||||||||||||||||||||||||||||| ||||||||||||||||||||| ~ | |||||||||||||||||||||||||||||||||||||||
+db_seq1674	DIGDIVRGRDLYFGKRKKKKQHGKETERDELESKLKEIFKKIHSE
+db_seq9926	                                             DNLVQNKKDAKDHYEGDEANDFFKLREDWWT
+db_seq10177	                                                                            ANRSTIWEAITCNAQGNTYFHATCSDGKGICSQATKQCRCGDGKSKAGKTSDNVSIVPTYFDYVPQYLR
+
+
+Target: target_seq7299	Length: 125	Llk: -86.508
+target_seq7299	DIGDIVRGKDLFLGNDEEKKQRKKLEKNLKTIFKKIYNDVTTNGKKQALQKRYQDRTGNYYQLREDWWALNRKDVWKALTCNAKAFYYFRNTCNGGSPTKGYCRCDGSNADQVPTYFDYVPQYLR
+          	|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+db_seq10237	DIGDIVRGKDLFLGNDEEKKQRKKLEKNLKTIFKKIYNDVTTNGKKQALQ
+db_seq11100	                                                  KRYQDRTGNYYQLREDW
+db_seq2547	                                                                   WALNRKDVWKALTCNAKAFYYFRNTCNGGSPTKGYCRCDGSNADQVPTYFDYVPQYLR
+
+
+Target: target_seq7308	Length: 123	Llk: -103.339
+target_seq7308	DIGDIVRGKDLFYGNPQEKKQRKQLDKKLKDIFKKIYGELKDAQKRYGSDENYFQLREDWWALNREDVWKAITCGAGTSDKYFRQTCGDEQNKSTLAKKQCRCEGANADQVPTYFDYVPQYLR
+          	||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| |||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+db_seq17167	DIGDIVRGKDLFYGNPQEKKQRKQLDKK
+db_seq2027	                            LKDIFKKIYGELKDAQKRY
+db_seq16437	                                               GSDENYFQLREDWW
+db_seq17159	                                                             ALNRQDVWKAITCGAGTSDKYFRQTCGDEQNKSTLAKKQCRCEGANADQVPTYFDYVPQYLR
+
+
+Target: target_seq7309	Length: 123	Llk: -86.323
+target_seq7309	DIGDIVRGRDLYGGNKKEKNRRDELEKNLKTIFEKIKGNNNSTLNGLPLDKVREYWWEENRETVWKAITCGTHDGDTYFHATCSDSDGNSQYQTQNQCRCTKSRGANANQVPTYFDYVPQYLR
+          	|||||||||||| ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+db_seq4780	DIGDIVRGRDLYSGNKKEKNRRDELEKNLKTIFEKIKGNNNSTLNGLPLDKVREYWWEENRETVWKAIT
+db_seq14875	                                                                     CGTHDGDT
+db_seq16907	                                                                             YFHATCSDSDGNSQYQTQNQCRCTKSRGANANQVPTYFDYVPQYLR
+
+
+Target: target_seq7320	Length: 135	Llk: -146.639
+target_seq7320	DIGDIVRGRDLYRGYDQKEKEKRED-LENNLKTIFGKIHGGLTNSALQDRYKKDEEDKNFFQLREDWWTANRHTVWEAITCNAWGNTYFRPTCGGSGNNATRAIHQCRCDGDKSKVGTNDTDQVPTYFDYVPQYLR
+          	|||||||||||||||||||||||||~|||||| |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| ||||||||||||| ||||||||||||| ||
+db_seq10437	DIGDIVRGRDLYRGYDQKEKE
+db_seq3577	                     KRE
+db_seq10655	                        DQLENNLKKIFGKIHGGLTNSALQDRYKKDEEDKNFFQLREDWWTANRHTVW
+db_seq10271	                                                                            EAITCNAWGNTYFRPT
+db_seq1343	                                                                                            C
+db_seq2660	                                                                                             GGSGNNA
+db_seq7278	                                                                                                    TRAIHKCRCDGDKSKVGTNETDQVPTYFDYVPQFLR
+
+
+Target: target_seq7292	Length: 111	Llk: -75.711
+target_seq7292	DIGDIVRGKDLYLGHKLGNNRLEARLETMFKNIQQNNNTELGELTTAQVREYWWALNRVQVWKAITCGAGMKDIYSKITDNGRTTLSYDKCGHYVYKDVPTNLDYVPQHLR
+          	| ||| |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| ||
+db_seq9096	DLGDIIRGKDLYLGHKLGNNRLEARLETMFKNIQQNNNTELGELTTAQVREYWWALNR
+db_seq9424	                                                          VQVWKAITCGAGMKDIYSKITDNGRTTLSYDKCGHYVYKDVPTNLDYVPQYLR
+
+
+Target: target_seq7293	Length: 127	Llk: -85.385
+target_seq7293	DIGDIVRGKDLYLGDKGEKRRLEDNLKKIFGIIYNNLMEDLKNYPTKKVEAEKRYNGDKNNDFFKLREDWWYANRRQVWKAIRCSAPTDAKYFIKTACGTGTETQGRCRCISGDVPTYFDYVPQYLR
+          	|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+db_seq13624	DIGDIVRGKDLYLGDKGEKRRLEDN
+db_seq2215	                         LKKIFGIIYNNLMEDLKNYPTKKVEAEKRYNGDKNNDFFKLREDWWYAN
+db_seq17112	                                                                          RRQVWKAIRCSAPTDAKYFIKTACGTGTETQGRCRCISGDVPTYFDYVPQYLR
+
+
+Target: target_seq7291	Length: 115	Llk: -79.844
+target_seq7291	DIGDIIRGKDLYIGNKKERARLEENLKKIFEKIHDKLDGKIKSNYNDSEGNYYLLREDWWNANRLDVWKAITCNVSGSHYFRRTCSDDTTETQDNCQCIGGTVPTYFDYVPQFLR
+          	|||||||||||||||||||||||||||||||||||||| |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| |||||| ||
+db_seq13263	DIGDIIRGKDLYIGNKKERARLEENLKKIFEKIHDKLDVKIKSNYNDSEGNYYLLREDWWNANRLDVW
+db_seq1065	                                                                    KAITCNVSGSHYFRRTCSDDTTETQDNCQCIGGTVPTN
+db_seq14944	                                                                                                          F
+db_seq1065	                                                                                                           DYVPQYLR
+
+
+Target: target_seq7300	Length: 122	Llk: -110.542
+target_seq7300	DIGDIIRGKDLFRGYNQKDRNEKKKLQDSLKNIFANIYEKLKDKEGAQKRYGSDENYFQLREDWWELNRETVWKAITCNAGGGKYFRATCSSGKTAYVTQSKCQCINFSVPTYFDYVPQYLR
+          	|||||||||||||||||||||||| ||||||||||||||||||||||||||||||||||||||||| |||||||||||||||||||||||||||||||||||||||||||||||||||||||
+db_seq6256	DIGDIIRGKDLFRGYNQKDRNEKKQLQDS
+db_seq1832	                             LKNIFANIYEKLKDKEGAQKRYGSDENYFQLREDWW
+db_seq9428	                                                                 EENRETVWKAITCNAGGG
+db_seq5878	                                                                                   KYFRATCSSGKTAYVTQSKCQCINFSVPTYFDYVPQYLR
+
+
+Target: target_seq7301	Length: 144	Llk: -120.283
+target_seq7301	DIGDIIRGKDLYRRDNKKKNQAREKEKLENKLKEYFEKIYKDVMSTNDQTKKEELQKRYQDGSDKDFFQLREDWWTANRHTVWEAITCNDDDKLTGASYFRPTCGSGKTATEAIHKCRCEKKRGTSDNVSIVPTYFDYVPQYLR
+          	|||||||||||||||||||||||||||||||||||||||||||||||||||||||| |||||||||||||||||||||||||||||||||||||||||||| ||||||||||||||||||||||||||||||||||||||||||
+db_seq9831	DIGDIIRGKDLYRRDNKKKNQAREKEKLENKLKEYFEKIYKDVMSTNDQTKKEE
+db_seq7201	                                                      L
+db_seq15471	                                                       QERYQDGSDKDFFQLRE
+db_seq10673	                                                                        DWWTANRHTVWEAITCNDDDKLTGASYFRQTCGSGKTATEAIHKCRC
+db_seq11572	                                                                                                                       EKKRGTSDNVSIVPTYFDYVPQYLR
+
+Parameters
+
+Gap initiation: 0.00807
+Gap extension:  0.22840
+Termination:    0.00100
+Recombination:  0.01500
+fMatch:         0.75000
+
+State frequencies:
+?	0.04000
+A	0.04000
+R	0.04000
+N	0.04000
+D	0.04000
+C	0.04000
+Q	0.04000
+E	0.04000
+G	0.04000
+H	0.04000
+I	0.04000
+L	0.04000
+K	0.04000
+M	0.04000
+F	0.04000
+P	0.04000
+S	0.04000
+T	0.04000
+W	0.04000
+Y	0.04000
+V	0.04000
+B	0.04000
+Z	0.04000
+X	0.04000
+.	0.04000
+
+Emission probabilities:
+	?	A	R	N	D	C	Q	E	G	H	I	L	K	M	F	P	S	T	W	Y	V	B	Z	X	.	
+?	0.04000	0.04000	0.04000	0.04000	0.04000	0.04000	0.04000	0.04000	0.04000	0.04000	0.04000	0.04000	0.04000	0.04000	0.04000	0.04000	0.04000	0.04000	0.04000	0.04000	0.04000	0.04000	0.04000	0.04000	0.04000	
+A	0.04000	0.81000	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	
+R	0.04000	0.00652	0.81000	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	
+N	0.04000	0.00652	0.00652	0.81000	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	
+D	0.04000	0.00652	0.00652	0.00652	0.81000	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	
+C	0.04000	0.00652	0.00652	0.00652	0.00652	0.81000	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	
+Q	0.04000	0.00652	0.00652	0.00652	0.00652	0.00652	0.81000	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	
+E	0.04000	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.81000	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	
+G	0.04000	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.81000	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	
+H	0.04000	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.81000	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	
+I	0.04000	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.81000	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	
+L	0.04000	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.81000	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	
+K	0.04000	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.81000	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	
+M	0.04000	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.81000	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	
+F	0.04000	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.81000	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	
+P	0.04000	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.81000	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	
+S	0.04000	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.81000	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	
+T	0.04000	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.81000	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	
+W	0.04000	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.81000	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	
+Y	0.04000	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.81000	0.00652	0.00652	0.00652	0.00652	0.00652	
+V	0.04000	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.81000	0.00652	0.00652	0.00652	0.00652	
+B	0.04000	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.81000	0.00652	0.00652	0.00652	
+Z	0.04000	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.81000	0.00652	0.00652	
+X	0.04000	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.81000	0.00652	
+.	0.04000	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.00652	0.81000	
+

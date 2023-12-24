@@ -1,0 +1,633 @@
+---
+title: "Sup_ghana_1"
+author: "Qian Feng"
+date: "2018/7/1"
+output:
+  pdf_document: default
+---
+
+```{r global_options, include=FALSE}
+knitr::opts_chunk$set(fig.width=12, fig.height=8,
+                      echo=TRUE, warning=FALSE, message=FALSE,
+                      tidy=TRUE)
+```
+
+
+##Load libraries
+
+```{r, message=FALSE, warning=FALSE}
+library(data.table)
+library(dplyr)
+library(ggfortify)
+library(ggplot2)
+library(Rtsne)
+library(stringr)
+library(starmie)
+library(ggtree)
+library(ape)
+library(pheatmap)
+library(proxy)
+library(stringr)
+library(knitr)
+library(plotly)
+library(mixOmics)
+cols <- c("#a6cee3","#1f78b4","#b2df8a","#33a02c","#fb9a99","#e31a1c","#fdbf6f","#ff7f00","#cab2d6","#6a3d9a","#ffff99","#b15928","#8dd3c7","#ffffb3","#bebada","#fb8072","#80b1d3","#fdb462","#b3de69","#fccde5","#d9d9d9","#bc80bd","#ccebc5","#ffed6f")
+```
+
+We start by clustering the raw Pilot reads using a python script that makes use of the Usearch software suite.
+```{python, eval=FALSE, include=FALSE}
+from mungo.fasta import FastaReader
+from collections import defaultdict
+with open("/Users/fengqian/Downloads/UniMelb_shared-master/project/OTU/pilot_upper.fasta",'w') as outfile:
+    for h,seq in FastaReader("/Users/fengqian/Downloads/UniMelb_shared-master/sequences/Ghana/Pilot.fasta"):
+        seq=seq.upper()
+        outfile.write(">"+h+"\n"+seq+"\n")
+```
+
+```{bash, eval = FALSE}
+cd
+Python /Users/fengqian/Downloads/UniMelb_shared-master/project/scripts/clusterDBLa.py -o /Users/fengqian/Downloads/UniMelb_shared-master/project/OTU/ -r /Users/fengqian/Downloads/UniMelb_shared-master/project/OTU/pilot_upper.fasta
+```
+
+####################################################################################################
+### Binary Analysis
+Now we can investigate the isolates based on shared DBLa sequence types. We have extracted 161 isolates from file "Pilot.fasta"(35591 reads), and prveious isolate_information.csv provides the locations of some of isolates (137 isolates,less than 161. At last, 133 out of 161 isolates have location), let's add these location information.
+```{r}
+isolateInformation <- fread("/Users/fengqian/Downloads/UniMelb_shared-master/ghana_isolate/ghana_isolateInformation_nolab.csv"
+                            , header=TRUE
+                            , data.table = FALSE)
+#Add in location information
+isolatepilot <- fread("/Users/fengqian/Downloads/UniMelb_shared-master/isolateInformation.csv"
+                            , header=TRUE
+                            , data.table = FALSE)
+isolatepilot <- isolatepilot[isolatepilot$Publication=="DayLab_Ghana_Pilot",]
+isolatepilot$Isolate <- unlist(lapply(isolatepilot$Isolate
+                                            , function(x) {
+                                              paste("P",str_split(x,  "_")[[1]][[1]],sep="")}))
+isolateInformation <- merge(isolateInformation,isolatepilot,by="Isolate",all.x=TRUE)
+
+isolateInformation <- isolateInformation[isolateInformation$Survey=="pilot",]
+isolateInformation$Location[which(isolateInformation$Location %in% NA)]="Ghana_Unknown"
+isolateInformation$Location=unlist(lapply(isolateInformation$Location
+                                            , function(x) {
+                                              str_split(x,  "_")[[1]][[2]]}))#concise the location for thesis
+isolateInformation$Location[isolateInformation$Location=="VeaGowrie"] <- "Vea/Gowrie"
+
+otuTable <- fread("/Users/fengqian/Downloads/UniMelb_shared-master/project/OTU/pilot_upper_renamed_otuTable_binary.txt"
+                  , data.table = FALSE
+                  , header=TRUE)
+
+otuMatrix <- as.matrix(otuTable[,2:ncol(otuTable)])
+rownames(otuMatrix) <- otuTable$`#OTU ID`
+```
+
+We found a total of `r sum(otuMatrix)` (35566) reads in the combined dataset, which clustered into a total of `r nrow(otuMatrix)` (17923). Of these `r sum(rowSums(otuMatrix)==1)`(11607) were only seen in one isolate.
+
+
+We next perform some filtering. We only investigate isolates that were found to have more than 20 DBLa types. This was found to be a sensible threshold on having adequetly sequences an isolates VAR repetoir. Furthermore as we are interested in the realtionship between isolates, we exclude the singletons from the binary analysis.
+```{r}
+#Filter otus that only appear in one isolate and isolates with less than 20 types
+MIN_ISOLATE_PER_OTU = 2
+MIN_OTUS_PER_ISOLATE = 20
+MAX_OTUS_PER_ISOLATE = Inf
+otuMatrix <- otuMatrix[, colSums(otuMatrix) >= MIN_OTUS_PER_ISOLATE]
+otuMatrix <- otuMatrix[, colSums(otuMatrix) <= MAX_OTUS_PER_ISOLATE]
+otumatrixfiltered <- otuMatrix[rowSums(otuMatrix) >= MIN_ISOLATE_PER_OTU, ]
+colnames(otumatrixfiltered) <-  unlist(lapply(colnames(otumatrixfiltered)
+                                            , function(x) {
+                                              str_split(x,  ".MID")[[1]][[1]]}))
+```
+
+
+We can now look at the number of reads per isolate for the different locations in ghana.
+```{r}
+otu_sums <- data.frame(Isolate=colnames(otumatrixfiltered), num_otus=colSums(otumatrixfiltered)
+                       , stringsAsFactors = FALSE)
+  
+otu_sums <- merge(otu_sums, isolateInformation, by.x='Isolate', by.y='Isolate'
+                , all.x=TRUE)
+
+#median_summary <- otu_sums %>% group_by(Location) %>% 
+  #summarise(n=n(),
+            #median=median(num_otus),
+            #max=max(num_otus))
+  
+#boxplot plot
+pdf(file="Types_per_isolate.pdf",width=10)
+gg <- ggplot(otu_sums, aes(factor(Location), num_otus, fill=Location)) + geom_boxplot()+scale_color_manual(values = cols[1:length(unique(isolateInformation$Location))])+xlab("")+ylab("Number of types per isolate")+ theme_bw()+theme(axis.text.x = element_text(colour ="black",size=18),axis.text.y = element_text(colour ="black",size=18),axis.title.y = element_text(size = 23,margin = unit(c(0, 4, 0, 0), "mm")),axis.title.x = element_text(size = 23,margin = unit(c(4, 0, 0, 0), "mm")))+ theme(panel.grid.major = element_blank(),panel.grid.minor = element_blank(),panel.border = element_rect(colour = "black",size=1))+ theme(legend.position = "none")
+#+theme(legend.title = element_blank(),legend.position = "top",legend.text=element_text(size=14),legend.background = element_blank(),legend.box.background = element_rect(colour = "white"))
+gg
+dev.off()
+```
+
+```{r}
+x=otu_sums$num_otus[which(otu_sums$Location=="Unknown")]
+y=otu_sums$num_otus[which(otu_sums$Location=="Vea/Gowrie")]
+z=otu_sums$num_otus[which(otu_sums$Location=="Soe")]
+wilcox.test(z, y, alternative = "two.sided")
+wilcox.test(z, x, alternative = "two.sided")
+wilcox.test(y, x, alternative = "two.sided")
+```
+
+
+
+
+## PCA
+```{r}
+otuMatrixfiltered_t <- t(otumatrixfiltered)
+
+pca <- prcomp(otuMatrixfiltered_t)
+
+pca <- data.frame(Isolate = rownames(otuMatrixfiltered_t)
+                     , pca$x[, 1:6]
+                     , stringsAsFactors = FALSE)
+
+pca <- merge(pca, isolateInformation, by.x='Isolate', by.y='Isolate'
+                , all.x=TRUE)
+
+#PCA plot
+pdf(file="PCA1.pdf")
+gg <- ggplot(pca, aes(PC1, PC2, colour=Location)) + geom_point(size=3)+xlab("PC1")+ylab("PC2")+ylim(-4, 4)+ theme_bw()+theme(axis.text.x = element_text(colour ="black",size=18),axis.text.y = element_text(colour ="black",size=18),axis.title.y = element_text(size = 23,margin = unit(c(0, 4, 0, 0), "mm")),axis.title.x = element_text(size = 23,margin = unit(c(4, 0, 0, 0), "mm")))+ theme(panel.grid.major = element_blank(),panel.grid.minor = element_blank(),panel.border = element_rect(colour = "black",size=1))+ theme(legend.position = "top",legend.title = element_blank(),legend.text=element_text(size=16),legend.background = element_blank(),legend.box.background = element_rect(colour = "white")) 
+#gg <- gg + scale_color_manual(values = cols[1:length(unique(isolateInformation$Location))])
+gg
+dev.off()
+pdf(file="PCA2.pdf")
+gg <- ggplot(pca, aes(PC1, PC3, colour=Location)) + geom_point(size=3)+xlab("PC1")+ylab("PC3")+ylim(-4, 4)+ theme_bw()+theme(axis.text.x = element_text(colour ="black",size=18),axis.text.y = element_text(colour ="black",size=18),axis.title.y = element_text(size = 23,margin = unit(c(0, 4, 0, 0), "mm")),axis.title.x = element_text(size = 23,margin = unit(c(4, 0, 0, 0), "mm")))+ theme(panel.grid.major = element_blank(),panel.grid.minor = element_blank(),panel.border = element_rect(colour = "black",size=1))+ theme(legend.position = "top",legend.title = element_blank(),legend.text=element_text(size=16),legend.background = element_blank(),legend.box.background = element_rect(colour = "white")) 
+#gg <- gg + scale_color_manual(values = cols[1:length(unique(isolateInformation$Location))])
+gg
+dev.off()
+```
+
+
+or use the mixomics packages to look at the pca plot,haha,all from the workshop. Let's firstly do the PCA plot and PLS_DA analysis.
+```{r}
+pca.ghana = pca(otuMatrixfiltered_t, ncomp = 10, center = TRUE, scale = TRUE)
+#plot(pca.ghana)
+plotIndiv(pca.ghana, group = pca$Location, ind.names = FALSE, legend = TRUE, title = 'PCA on Ghana',X.label="PC1",Y.label="PC2",xlim = c(-20,10),ylim=c(-10,20))
+plotIndiv(pca.ghana, group = pca$Location, comp=c(1,3), ind.names = FALSE, legend = T, title = 'PCA on Ghana',X.label="PC1",Y.label="PC3",xlim = c(-20,10),ylim=c(-20,10))
+```
+
+PLS-DA (Partial Least Squares Discriminant Analysis) fits a classifier multivariate model that assigns samples into known classes.
+
+```{r}
+ghana.plsda <- plsda(otuMatrixfiltered_t, pca$Location, ncomp = 10) 
+plotIndiv(ghana.plsda , comp = 1:2,
+group = pca$Location, ind.names = FALSE, 
+ellipse = TRUE, legend = TRUE, title = 'PLSDA on Ghana')
+```
+
+
+```{r}
+background = background.predict(ghana.plsda, comp.predicted=2, dist = "max.dist")
+plotIndiv(ghana.plsda, comp = 1:2,
+          group = pca$Location, ind.names = FALSE, title = "Maximum distance",
+          legend = TRUE,  background = background)
+```
+
+
+The orverall error decrease sharply from the first component to second component.
+
+```{r}
+set.seed(2543) # for reproducibility
+t1 = proc.time()
+perf.plsda.ghana <- perf(ghana.plsda, validation = "Mfold", folds = 5, 
+                  progressBar = FALSE, auc = TRUE, nrepeat = 10) 
+t2 = proc.time()
+running_time = t2 - t1; running_time # running time
+plot(perf.plsda.ghana, col = color.mixo(5:7), sd = TRUE, legend.position = "horizontal")###overall misclassification error rate or a balanced error rate calculated on the left-out samples
+auc.plsda = auroc(ghana.plsda, roc.comp = 7)
+```
+
+
+
+Let's zoom out the first PCA plot.
+
+```{r, eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
+ggplotly(gg)
+```
+
+Also worth looking at the 3rd and 4th principal components.
+
+```{r}
+#PCA plot
+gg <- ggplot(pca, aes(PC3, PC4, colour=Location)) + geom_point() 
+gg <- gg + scale_color_manual(values = cols[1:length(unique(isolateInformation$Location))])
+gg <- gg + theme_bw()
+gg
+```
+Let's zoom out this PCA plot.
+
+```{r, eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
+ggplotly(gg)
+```
+
+Location doesn't appear to be an issue.
+
+Since there are certain number of outliers in both two PCA plots, what's more, I found the same outlier (max PC3 or max PC4) in second plot is also one outlier in the first plot. 
+
+```{r}
+pca[which(pca$PC3==min(pca$PC3)),]
+pca[which(pca$PC3==max(pca$PC3)),]
+pca[which(pca$PC4==max(pca$PC4)),]
+pca[which(pca$PC4==min(pca$PC4)),]
+```
+
+So let's remove the outliers in the first plot and look at the resulting two plots. Result indicates the difference between any two isolates is very tiny, most points concentrate in one small region. From the first plot, if we conclude all the data points into an ellipse, its long axis and short axis has a big difference, suggesting this reduction makes sense. 
+
+```{r}
+MAX_PC2 = 5
+MAX_PC1 = 5
+pca_patial <- pca[pca$PC1 <= MAX_PC1,]
+pca_patial <- pca_patial[pca_patial$PC2 <= MAX_PC2,]
+#PCA plot 1
+gg <- ggplot(pca_patial, aes(PC1, PC2, colour=Location, shape =Location)) + geom_point() 
+gg <- gg + scale_color_manual(values = cols[1:length(unique(isolateInformation$Location))])
+gg <- gg + theme_bw()
+gg <- gg + labs(title = "partial plot")
+gg
+```
+
+
+```{r}
+#PCA plot 2
+gg <- ggplot(pca_patial, aes(PC3, PC4, colour=Location, shape =Location)) + geom_point() 
+gg <- gg + scale_color_manual(values = cols[1:length(unique(isolateInformation$Location))])
+gg <- gg + theme_bw()
+gg <- gg + labs(title = "partial plot")
+gg
+```
+
+
+```{r, eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
+ggplotly(gg)
+```
+
+## Conserved DBLa types
+
+We can also investigate the most conserved DBLa types. First let's look at a histogram of the number of times each DBLa is seen in the global population. It suggests that the majority of types are seen less than 20 times(`r length(which(rowSums(otumatrixfiltered)<20))`>>`r length(which(rowSums(otumatrixfiltered)>=20))`). We then take a closer look at those seen at least 20 times.
+
+```{r}
+pdf(file="Ghana_typeoccurrence.pdf",width=11)
+temp=as.data.frame(table(rowSums(otumatrixfiltered)))
+ggplot(data=temp, aes(x=as.numeric(as.character(Var1)), y=Freq)) +
+    geom_bar(stat="identity",col=I("black"), 
+      fill=I("black"), 
+      alpha=I(.4))+xlab(expression(paste("Frequency of each DBL",alpha, " type") ))+ylab("Counts")+scale_y_continuous(breaks=seq(0,3400,200),limits=c(0,3400))+scale_x_continuous(breaks=seq(0,130,by=10),labels=as.character(seq(0,130,by=10)))+theme_bw()+theme(axis.text.x = element_text(colour ="black",size=18),axis.text.y = element_text(colour ="black",size=18),axis.title.y = element_text(size = 23,margin = unit(c(0, 4, 0, 0), "mm")),axis.title.x = element_text(size = 23,margin = unit(c(4, 0, 0, 0), "mm")))+ theme(panel.grid.major = element_blank(),panel.grid.minor = element_blank(),panel.border = element_rect(colour = "black",size=1))
+dev.off()
+#expand = c(0, 0),expand = c(0, 0),
+```
+
+
+
+
+
+```{r, message=FALSE, warning=FALSE}
+h <- hist(rowSums(otumatrixfiltered), breaks=500, plot = FALSE)
+plot(h$mids, h$counts, log="y")##h$mids means the rowSums(otumatrixfiltered)
+abline(v=c(20,50), col='red')
+```
+
+```{r}
+majorTypeMatrix <- otumatrixfiltered[rowSums(otumatrixfiltered)>=20,]
+col_annotations <- data.frame(Isolate = colnames(majorTypeMatrix),
+                              stringsAsFactors = FALSE)
+col_annotations <- merge(col_annotations, isolateInformation,
+                         by.x="Isolate", by.y="Isolate",
+                         all.x=TRUE)
+rownames(col_annotations) <- col_annotations$Isolate
+col_annotations <- col_annotations[, c("Isolate","Location")]
+col_annotations <- col_annotations[order(col_annotations$Location),]
+majorTypeMatrix <- majorTypeMatrix[, match(col_annotations$Isolate, colnames(majorTypeMatrix))]
+col_annotations$Isolate <- NULL
+#pdf(file="heatmap.pdf",width=11)
+pheatmap(majorTypeMatrix, cluster_cols = FALSE
+         , annotation_col = col_annotations
+         , show_rownames = FALSE
+         , fontsize_row=2
+         , show_colnames = FALSE
+         , treeheight_row = 0
+         , color=c("#ffffff","#000000"),legend = FALSE,annotation_names_col=FALSE,annotation_colors=list(Location=c("Soe"="#F8766D","Unknown"="#00BA38","Vea/Gowrie"="#619CFF")))
+#dev.off()
+
+```
+
+This suggests three regions seem to have no big difference about the distribution of DBLa tags again.
+
+
+## RAxML
+First we need to produce a binary fasta file:
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+text=ggplot2:::interleave(paste(">", rownames(otuMatrixfiltered_t), sep=""),
+                          apply(otuMatrixfiltered_t, 1 , paste , collapse = "" ))
+writeLines(text, con="/Users/fengqian/Downloads/UniMelb_shared-master/project/OTU/DBLa_binary.fasta",
+           sep="\n")
+```
+
+Now we can run RAxML
+
+```{bash, eval=FALSE, include=FALSE}
+cd /vlsci/SG0011/qian-feng/UniMelb_shared-master/project/standard-RAxML-master
+./raxmlHPC-PTHREADS -m BINCAT -p 12345 -s /vlsci/SG0011/qian-feng/UniMelb_shared-master/project/OTU/DBLa_binary.fasta -n raxmlTree_T1 -T 20 | tee raxml.log
+cp *.raxmlTree_T1 ../OTU
+cp raxml.log ../OTU
+```
+
+
+We can now look at the output of RAxML.
+```{r}
+raxml <- read.tree("/Users/fengqian/Downloads/UniMelb_shared-master/project/OTU/RAxML_result.raxmlTree_T1")
+
+groupInfo <- isolateInformation %>% group_by(Location) %>%
+  do(taxa_list = .$Isolate)
+
+groups <- lapply(groupInfo$taxa_list, as.vector)
+names(groups) <- groupInfo$Location
+raxml <- groupOTU(raxml, groups)
+t_cols <- cols
+names(t_cols) <- names(groups)
+
+pdf(file="tree.pdf",width=10)
+gg <- ggtree(raxml, aes(color=group, label=node)
+             , size=0.3, branch.length = "none", layout="circular")
+#gg <- gg + scale_color_manual(values=cols,labels=names(groups)) 
+gg <- gg +  theme(legend.position="right")
+gg <- gg +  labs(color='Location')
+gg <- gg + theme(legend.text=element_text(size=14),legend.title = element_text(size = 18))
+gg
+dev.off()
+```
+
+Actually, comparing the resulting trees from RAxML and FFP, if we ignore the isolate's location information, there is still a big difference about these two trees' topologies.This makes sense since different methods always produce different trees. Whatever method is emploied, the separation about the location is always not clearly.
+
+
+## Type A and type B/C VAR genes
+
+We can also compare the number of type A and type B/C VAR genes by hmmsearch.
+
+```{bash, eval=FALSE}
+python /Users/fengqian/Downloads/UniMelb_shared-master/project/scripts/allocate_reads_to_domains.py --fasta /Users/fengqian/Downloads/UniMelb_shared-master/project/OTU/pilot_upper_renamed_centroids.fasta --hmm /Users/fengqian/Downloads/UniMelb_shared-master/project/data/all_protein_exon1_domain_HMMs.hmm --out_dir /Users/fengqian/Downloads/UniMelb_shared-master/project/OTU/TypeABC/
+```
+
+
+```{r}
+type_freq_df <- data.frame(otu=rownames(otumatrixfiltered)
+                           , num_isolates=rowSums(otumatrixfiltered)
+                           , stringsAsFactors = FALSE)
+type_allocations <- fread("/Users/fengqian/Downloads/UniMelb_shared-master/project/OTU/TypeABC/pilot_upper_renamed_centroids_domainAllocations.csv", sep=",", header=TRUE, data.table = FALSE)
+type_allocations$read <- gsub(";sample.*", "", type_allocations$read)
+type_freq_df <- merge(type_freq_df, type_allocations
+                      ,by.x = "otu", by.y="read", all.x=TRUE)
+#### as long as the domain name include "DBLa1",it belongs to type A
+type_freq_df$type[grepl("DBLa1", type_freq_df$domain)] <- "A" 
+type_freq_df$type[!grepl("DBLa1", type_freq_df$domain)] <- "B/C"
+table(type_freq_df$domain)
+table(type_freq_df$type)
+# write.csv(type_freq_df,file="/Users/fengqian/Downloads/UniMelb_shared-master/project/OTU/TypeABC/type_freq_df.csv",row.names = FALSE)
+```
+
+
+
+## Goal 1
+
+```{r}
+files <- Sys.glob("/Users/fengqian/Downloads/UniMelb_shared-master/project/OTU/TypeABC/*.txt")
+search_data <- do.call(rbind, lapply(files, function(f) fread(paste("grep -v ^# ",f, sep = ""),data.table = FALSE,header = FALSE,sep=" ")))
+colnames(search_data) <- c("target_name", "accession_t", "query_name", "accession_q","E_value1", "score1", "bias1", "E_value2", "score2", "bias2", "exp", "reg","clu", "ov", "env", "dom", "rep", "inc", "description_of_target") 
+search_data$`target_name` <- gsub(";sample.*", "", search_data$`target_name`)
+search_data=search_data[search_data$`target_name`[1:nrow(search_data)] %in% type_freq_df$otu,]
+temp = as.data.frame(table(search_data$`target_name`))
+nrow(temp)
+#search_data <- search_data[order(search_data$ E-value1 , decreasing = FALSE),]
+```
+
+
+```{r}
+hist(temp$Freq,xlab="Number of E values for each read",main="",col="blue")
+```
+
+
+
+Now see E_values' distributions from all samples and smallest E value's distribution from each sample.Then we look at the E value distribution of randomly choosen otu.
+
+```{r}
+summary(log(search_data$`E_value1`))
+hist(log(search_data$`E_value1`), breaks=20, col="red",prob = TRUE,main="Histogram of E values from All reads",xlab="log(E values)")
+lines(density(log(search_data$`E_value1`)))
+#####################################################################
+hist(log(type_freq_df$`e-value`), breaks=20, col="red",prob = TRUE,main="Histogram of Best E values from All reads",xlab="log(E values)")
+lines(density(log(type_freq_df$`e-value`)))
+```
+
+
+
+```{r}
+read.random=temp$Var1[sample(nrow(temp),1)]
+read.random.Evalues=search_data[search_data$`target_name`== read.random, 5]
+hist(log(read.random.Evalues), breaks=20, col="red",prob = TRUE,xlab="log(E values)",main="Histogram of E values from Randomly Chosen Read")
+lines(density(log(read.random.Evalues)))
+```
+
+
+## Goal 2
+```{r}
+Domains <- search_data$`query_name`[!duplicated(search_data$`query_name`)]
+DBLalpha_Domains <-Domains[grepl("DBLa", Domains)] 
+filtered_search_data <- search_data[search_data$`query_name`[1:nrow(search_data)]%in% DBLalpha_Domains,]
+#pdf(file="Domains_Evalue_Dist.pdf", height=4, width=12)
+gg <- ggplot(filtered_search_data, aes(x=query_name, y = log(E_value1), fill=query_name)) + geom_boxplot()#boxplot plot for E value Distribution for each domain type
+gg <- gg + scale_color_manual(values = cols[1:length(unique(query_name))])
+gg <- gg + theme_grey()
+gg <- gg + xlab("")+ylab("log(E values)")
+gg
+#dev.off()
+```
+
+From this graph, we can see group A has higher E values and lower variance compared with other domain types.
+
+## Goal 3.
+Look at the hmmer userguide page 33.
+
+
+
+
+
+Classify these 6311 ghana reads into six groups based on paper:Peter C. Bull et al. 
+** An approach to classifying sequence tags sampled from Plasmodium falciparum var genes **
+ref: ** Plasmodium falciparum Variant Surface Antigen Expression Patterns during Malaria **
+After that, using this paper's supp material called sequenceClassifier3.xls to classify these fasta seqs, final result is organized in file called sixgroup_classification_finalresult.csv. 
+Conclusion:
+(1) Final result is also consistent with Fig2 in previous paper: Type A only conclude group 1,2,3,and 6; Type B/C doesn't contain group 1. 
+(2) At domain level, DBLa1 seems very related with group 1,2,and 3(Cys is 2); DBLa0 seems very related with group 4,5 and 6. 
+
+
+```{python, eval=FALSE, include=FALSE}
+from mungo.fasta import FastaReader
+from collections import defaultdict
+import csv
+reads=[]
+with open("/Users/fengqian/Downloads/UniMelb_shared-master/project/OTU/TypeABC/type_freq_df.csv") as csvfile:
+    reader = csv.DictReader(csvfile)
+    for row in reader:
+        #print(row[])
+        reads.append(row['otu'])
+with open("/Users/fengqian/Downloads/UniMelb_shared-master/project/OTU/TypeABC/sixgroup_classification_fasta.csv",'w') as f:
+    writer = csv.writer(f)
+    for h,seq in FastaReader("/Users/fengqian/Downloads/UniMelb_shared-master/project/mosaic_data/Protein_translateable_pilot_upper_centroids.fasta"):
+        h=h.split(";")[0]
+        if h in reads and seq[0:5]=="DIGDI" and seq[-5:]=="PQFLR":
+            writer.writerow([">"+ h] + [seq])
+```
+
+
+
+```{r}
+group_allocations <- fread("/Users/fengqian/Downloads/UniMelb_shared-master/project/OTU/TypeABC/sixgroup_classification_finalresult.csv", sep=",", header=TRUE, data.table = FALSE)
+group_allocations <- group_allocations[group_allocations$Cys!=0,]
+group_allocations$read <- gsub(">", "", group_allocations$read)
+type_group <- merge(group_allocations,type_freq_df
+                      ,by.x = "read", by.y="otu", all.x=TRUE)
+table(type_group$group,type_group$type)
+table(type_group$domain,type_group$group)
+```
+
+
+```{r}
+ggplot(type_group, aes(group, ..count..)) + geom_bar(aes(fill = type_group$type), position = "dodge")
+```
+
+
+
+
+
+
+
+
+```{r}
+
+#Remove rares
+type_freq_df <- type_freq_df[type_freq_df$num_isolates>1,]###Actually no rares
+
+#boxplot
+gg <- ggplot(type_freq_df, aes(factor(type), num_isolates, fill=type)) + geom_boxplot()
+gg <- gg + theme_bw()
+gg <- gg + scale_y_log10()
+gg
+```
+
+
+
+
+This suggest type A has a higher frequency than type B/C about the number of isolates, even though type B/C has more reads than type A. This trend is very similar with the global data, showing A has a higher num_isolates than B even though A vs B/C is 1404:12530.But if we compare them carefuly, Ghana B/C is slightly lower than global data.
+
+####################################################################################################
+
+
+
+####################################################################################################
+## FFP
+
+Try pilot data still.
+We emply the centroids P3D7.fasta to get the approariate k.
+```{bash, eval=FALSE, include=FALSE}
+cd
+Python /Users/fengqian/Downloads/UniMelb_shared-master/project/scripts/clusterDBLa.py -o /Users/fengqian/Downloads/UniMelb_shared-master/project/ffp_data/ -r /Users/fengqian/Downloads/UniMelb_shared-master/ghana_isolate/ghana_labisolate_analysis/pilot_labisolate/P3D7.fasta
+```
+
+
+```{bash, eval=FALSE, include=FALSE}
+cd ffp-3.19
+ffpvprof -e 40 -f 2 /Users/fengqian/Downloads/UniMelb_shared-master/project/ffp_data/P3D7_renamed_centroids.fasta >/Users/fengqian/Downloads/UniMelb_shared-master/project/ffp_data/ffp_word_usage.txt
+
+ffpreprof -e 40  /Users/fengqian/Downloads/UniMelb_shared-master/project/ffp_data/P3D7_renamed_centroids.fasta >/Users/fengqian/Downloads/UniMelb_shared-master/project/ffp_data/ffp_entropy_profile.txt
+```
+
+
+First let look at word usage to get an idea of a lower bound.The peak is in feature count distribution is our lower bound, termed as $k_{hman}$,Then from the cumulative relative entropy curve, get the minimal $k_{CREmin}$ is our upper bound. 
+
+We can now attempt to choose an appropriate value of k. First let look at word usage to get an idea of a lower bound.
+```{r}
+word_usage <- fread("/Users/fengqian/Downloads/UniMelb_shared-master/project/ffp_data/ffp_word_usage.txt",
+                    data.table = FALSE)
+plot(word_usage,xlab="Feature length, k",ylab="Feature count",type="h",col="blue")
+```
+
+
+```{r}
+entropy <- fread("/Users/fengqian/Downloads/UniMelb_shared-master/project/ffp_data/ffp_entropy_profile.txt",
+                    data.table = FALSE)
+plot(entropy,xlab="Feature length, k",ylab="Cumulative relative entropy, CRE",pch=15,type="o",col="dark red")
+```
+
+Thus a choice of k=20 appears to be appropriate.
+
+We can now run a script to calculate the ffp distance matrix, its output is .phylip format.
+```{bash, eval=FALSE}
+ python /vlsci/SG0011/qian-feng/UniMelb_shared-master/project/scripts/ffp.py --kmer_length 20 --out /vlsci/SG0011/qian-feng/UniMelb_shared-master/project/ffp_data/ffp_distance_matrix.phylip --seq /vlsci/SG0011/qian-feng/UniMelb_shared-master/sequences/Ghana/Pilot.fasta --verbos
+```
+
+
+Finally a tree was built using fastme v2.1.5 with default parameters. We can now have a look at the resulting tree.
+```{r}
+ffp <- read.tree("/Users/fengqian/Downloads/UniMelb_shared-master/project/ffp_data/ffp_distance_matrix_phylip_fastme/ffp_distance_matrix_phylip_fastme-tree.txt")
+
+gg <- ggtree(ffp, size=0.3, branch.length = "none", layout="circular") + ggtitle("Pilot Phylogenetic tree") 
+gg
+
+```
+
+```{r}
+###add location information
+groupInfo <- isolateInformation %>% group_by(Location) %>%
+  do(taxa_list = .$Isolate)
+
+groups <- lapply(groupInfo$taxa_list, as.vector)
+names(groups) <- groupInfo$Location
+ffp <- groupOTU(ffp, groups)
+
+t_cols <- cols
+names(t_cols) <- names(groups)
+pdf(file="ffptree.pdf",width=10)
+gg <- ggtree(ffp, aes(color=group, label=node)
+             , size=0.3, branch.length = "none", layout="circular")
+#gg <- gg + scale_color_manual(values=as.character(t_cols[names(t_cols) %in% names(groups)]),labels=names(t_cols)) 
+gg <- gg +  theme(legend.position="right")
+gg <- gg +  labs(color='Location')
+gg <- gg + theme(legend.text=element_text(size=14),legend.title = element_text(size = 18))
+gg
+dev.off()
+```
+
+compare the Raxml and ffp trees:
+```{r echo=FALSE, warning=FALSE}
+treedist(ffp,raxml,check.labels=FALSE)
+```
+
+
+
+####################################################################################################
+
+```{r}
+save(list =ls(all=TRUE), file="/Users/fengqian/Downloads/UniMelb_shared-master/project/Sup_ghana_1.RData")
+```
+
+#####
+## compare sequence length about DNA and aa between Ghana and global data
+
+```{r}
+DNA_seq_Ghana <- unlist(fread("/Users/fengqian/Downloads/UniMelb_shared-master/project/data/seq_length/DNA_seq_length.txt", data.table = FALSE)[1,])
+Protein_seq_Ghana <- unlist(fread("/Users/fengqian/Downloads/UniMelb_shared-master/project/data/seq_length/Protein_seq_length.txt", data.table = FALSE)[1,])
+DNA_seq_global <- unlist(fread("/Users/fengqian/global_var/qian_report/seq_length/DNA_seq_length.txt", data.table = FALSE)[1,])
+Protein_seq_global <- unlist(fread("/Users/fengqian/global_var/qian_report/seq_length/Protein_seq_length.txt", data.table = FALSE)[1,])
+seq <- rbind(as.matrix(DNA_seq_Ghana),as.matrix(Protein_seq_Ghana),as.matrix(DNA_seq_global),as.matrix(Protein_seq_global))
+df <- data.frame(f1=c(rep("Ghana",(length(DNA_seq_Ghana)+length(Protein_seq_Ghana))),rep("global",(length(DNA_seq_global)+length(Protein_seq_global)))),f2=c(rep("DNA",length(DNA_seq_Ghana)),rep("Protein",length(Protein_seq_Ghana)),rep("DNA",length(DNA_seq_global)),rep("Protein",length(Protein_seq_global))),seq=seq,stringsAsFactors = FALSE)
+#boxplot
+gg <- ggplot(aes(y = seq, x = f2, fill = f1), data = df)+geom_boxplot()
+gg <- gg + theme_grey()
+gg <- gg + ylab("Sequence length")
+gg <- gg + xlab(" ")
+gg <- gg + scale_fill_discrete(name = "Legend")
+gg
+
+```
+
