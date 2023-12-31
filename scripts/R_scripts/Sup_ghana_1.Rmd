@@ -118,7 +118,14 @@ gg <- ggplot(otu_sums, aes(factor(Location), num_otus, fill=Location)) + geom_bo
 #+theme(legend.title = element_blank(),legend.position = "top",legend.text=element_text(size=14),legend.background = element_blank(),legend.box.background = element_rect(colour = "white"))
 gg
 dev.off()
+
+
+pdf(file="Types_per_isolate.pdf",width=10)#this figure is for examiners.It's the same with above one.
+ggplot(otu_sums, aes(factor(Location), num_otus)) + geom_boxplot(col=I("black"),fill=I("black"),alpha=I(.4))+xlab("")+ylab("Number of types per isolate")+scale_y_continuous(breaks=seq(0,600,100),limits=c(0,618))+theme_bw()+theme(axis.text.x = element_text(colour ="black",size=18),axis.text.y = element_text(colour ="black",size=18),axis.title.y = element_text(size = 23,margin = unit(c(0, 4, 0, 0), "mm")),axis.title.x = element_text(size = 23,margin = unit(c(4, 0, 0, 0), "mm")))+ theme(panel.grid.major = element_blank(),panel.grid.minor = element_blank(),panel.border = element_rect(colour = "black",size=1))+ theme(legend.position = "none")+stat_summary(fun=mean, geom="point", shape=20, size=12, color="red", fill="red")+ geom_segment(aes(x = 1, y = 350, xend = 2, yend = 350))+ geom_segment(aes(x = 2, y = 450, xend = 3, yend = 450))+ geom_segment(aes(x = 1, y = 550, xend = 3, yend = 550))+ geom_segment(aes(x = 1, y = 350, xend = 1, yend = 340))+ geom_segment(aes(x = 2, y = 350, xend = 2, yend = 340))+ geom_segment(aes(x = 2, y = 450, xend = 2, yend = 440))+ geom_segment(aes(x = 3, y = 450, xend = 3, yend = 440))+ geom_segment(aes(x = 3, y = 550, xend = 3, yend = 540))+ geom_segment(aes(x = 1, y = 550, xend = 1, yend = 540))+scale_size_identity()+ annotate(geom="text", x=1.5, y=375, label="p = 0.428",size=6)+annotate(geom="text", x=2.5, y=475, label="p = 0.660",size=6)+annotate(geom="text", x=2, y=575, label="p = 0.109",size=6)
+dev.off()
 ```
+
+
 
 ```{r}
 x=otu_sums$num_otus[which(otu_sums$Location=="Unknown")]
@@ -156,6 +163,13 @@ gg <- ggplot(pca, aes(PC1, PC3, colour=Location)) + geom_point(size=3)+xlab("PC1
 #gg <- gg + scale_color_manual(values = cols[1:length(unique(isolateInformation$Location))])
 gg
 dev.off()
+
+pdf(file="PCA.pdf",width=10)
+gg <- ggplot(pca, aes(PC1, PC2, colour=Location)) + geom_point(size=3)+xlab("PC1")+ylab("PC2")+ylim(-4, 4)+scale_x_continuous(breaks=seq(-4,8,4),limits=c(-4,8))+theme_bw()+theme(axis.text.x = element_text(colour ="black",size=18),axis.text.y = element_text(colour ="black",size=18),axis.title.y = element_text(size = 23,margin = unit(c(0, 4, 0, 0), "mm")),axis.title.x = element_text(size = 23,margin = unit(c(4, 0, 0, 0), "mm")))+ theme(panel.grid.major = element_blank(),panel.grid.minor = element_blank(),panel.border = element_rect(colour = "black",size=1))+ theme(legend.position = "top",legend.title = element_blank(),legend.text=element_text(size=18),legend.background = element_blank(),legend.box.background = element_rect(colour = "white")) 
+#gg <- gg + scale_color_manual(values = cols[1:length(unique(isolateInformation$Location))])
+gg
+dev.off()
+
 ```
 
 
@@ -324,33 +338,33 @@ writeLines(text, con="/Users/fengqian/Downloads/UniMelb_shared-master/project/OT
            sep="\n")
 ```
 
-Now we can run RAxML
-
+Now we can run RAxML. The commands are from RAxML tutorial (https://cme.h-its.org/exelixis/web/software/raxml/hands_on.html).
 ```{bash, eval=FALSE, include=FALSE}
-cd /vlsci/SG0011/qian-feng/UniMelb_shared-master/project/standard-RAxML-master
-./raxmlHPC-PTHREADS -m BINCAT -p 12345 -s /vlsci/SG0011/qian-feng/UniMelb_shared-master/project/OTU/DBLa_binary.fasta -n raxmlTree_T1 -T 20 | tee raxml.log
-cp *.raxmlTree_T1 ../OTU
-cp raxml.log ../OTU
+cd /data/gpfs/projects/punim0609/qian_feng/UniMelb_shared-master/project/standard-RAxML-master
+
+./raxmlHPC-PTHREADS -m BINCAT -p 12345 -# 20 -s /data/gpfs/projects/punim0609/qian_feng/UniMelb_shared-master/project/OTU/DBLa_binary.fasta -n T1 -T 10
+
+./raxmlHPC-PTHREADS -m BINCAT -p 12345 -b 12345 -# 100 -s /data/gpfs/projects/punim0609/qian_feng/UniMelb_shared-master/project/OTU/DBLa_binary.fasta -n T2 -T 10
+
+./raxmlHPC-PTHREADS -m BINCAT -p 12345 -f b -t RAxML_bestTree.T1 -z RAxML_bootstrap.T2 -n T3
+
+
+cp RAxML_bipartitionsBranchLabels.T3 ../OTU
 ```
 
 
 We can now look at the output of RAxML.
 ```{r}
-raxml <- read.tree("/Users/fengqian/Downloads/UniMelb_shared-master/project/OTU/RAxML_result.raxmlTree_T1")
-
+raxml <- read.raxml("/Users/fengqian/Downloads/UniMelb_shared-master/project/OTU/RAxML_bipartitionsBranchLabels.T3")
 groupInfo <- isolateInformation %>% group_by(Location) %>%
   do(taxa_list = .$Isolate)
 
 groups <- lapply(groupInfo$taxa_list, as.vector)
 names(groups) <- groupInfo$Location
 raxml <- groupOTU(raxml, groups)
-t_cols <- cols
-names(t_cols) <- names(groups)
 
 pdf(file="tree.pdf",width=10)
-gg <- ggtree(raxml, aes(color=group, label=node)
-             , size=0.3, branch.length = "none", layout="circular")
-#gg <- gg + scale_color_manual(values=cols,labels=names(groups)) 
+gg <- ggtree(raxml, aes(color=group, label=node),size=0.3, branch.length = "none", layout="circular") + geom_text2(aes(x = branch,label=bootstrap,subset = !is.na(as.numeric(bootstrap)) & as.numeric(bootstrap) > 60))
 gg <- gg +  theme(legend.position="right")
 gg <- gg +  labs(color='Location')
 gg <- gg + theme(legend.text=element_text(size=14),legend.title = element_text(size = 18))
@@ -358,7 +372,6 @@ gg
 dev.off()
 ```
 
-Actually, comparing the resulting trees from RAxML and FFP, if we ignore the isolate's location information, there is still a big difference about these two trees' topologies.This makes sense since different methods always produce different trees. Whatever method is emploied, the separation about the location is always not clearly.
 
 
 ## Type A and type B/C VAR genes
@@ -528,7 +541,7 @@ This suggest type A has a higher frequency than type B/C about the number of iso
 ## FFP
 
 Try pilot data still.
-We emply the centroids P3D7.fasta to get the approariate k.
+We employ the centroids P3D7.fasta to get the appropriate k.
 ```{bash, eval=FALSE, include=FALSE}
 cd
 Python /Users/fengqian/Downloads/UniMelb_shared-master/project/scripts/clusterDBLa.py -o /Users/fengqian/Downloads/UniMelb_shared-master/project/ffp_data/ -r /Users/fengqian/Downloads/UniMelb_shared-master/ghana_isolate/ghana_labisolate_analysis/pilot_labisolate/P3D7.fasta
@@ -576,6 +589,7 @@ gg
 
 ```
 
+
 ```{r}
 ###add location information
 groupInfo <- isolateInformation %>% group_by(Location) %>%
@@ -598,11 +612,12 @@ gg
 dev.off()
 ```
 
+
 compare the Raxml and ffp trees:
 ```{r echo=FALSE, warning=FALSE}
 treedist(ffp,raxml,check.labels=FALSE)
 ```
-
+Actually, comparing the resulting trees from RAxML and FFP, if we ignore the isolate's location information, there is still a big difference about these two trees' topologies.This makes sense since different methods always produce different trees. Whatever method is employed, the separation about the location is always not clearly.
 
 
 ####################################################################################################
