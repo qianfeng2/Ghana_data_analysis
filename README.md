@@ -2,4 +2,4 @@
 
 Scripts and data for reproducing the analysis in "DBLα sequences from a cross-sectional study in Ghana". All the details of this analysis are in the appendix of my PhD thesis.
 
-Last updated: 25 Dec 2023
+Last updated: 31 Dec 2023
