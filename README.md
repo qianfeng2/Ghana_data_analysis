@@ -1,4 +1,6 @@
 # Ghana pilot data analysis
+-----------------------
+[![DOI](https://zenodo.org/badge/735254926.svg)](https://zenodo.org/doi/10.5281/zenodo.13764593)
 
 Scripts and data for reproducing the "Analysis of DBLα tags from a cross-sectional study in Ghana". All the details of this analysis are in the appendix of my PhD thesis.
 
