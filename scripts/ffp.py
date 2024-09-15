@@ -17,7 +17,7 @@ def loadSequences(inputfile, kmer_length, verbose):
   kmers = {}
   kmer_count = 0
   for h,s in FastaReader(inputfile):
-    iso = h.split(".")[0]
+    iso = h.split("sample=")[1]
     s = s.replace("A", "R")
     s = s.replace("G", "R")
     s = s.replace("a", "R")

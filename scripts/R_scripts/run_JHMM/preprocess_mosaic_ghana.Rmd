@@ -1,0 +1,117 @@
+---
+title: 'Ghana Data Preprocess for Mosaic'
+author: "Qian Feng"
+date: '`r Sys.Date()`'
+output:
+  pdf_document: default
+---
+
+```{r global_options, include=FALSE}
+knitr::opts_chunk$set(fig.width=12, fig.height=8,
+                      echo=TRUE, warning=FALSE, message=FALSE,
+                      tidy=TRUE)
+```
+
+
+```{r}
+library(data.table)
+library(stringr)
+library(readr)
+library(ggplot2)
+library(boot)
+library(ggcorrplot)
+library(reshape2)
+library(dplyr)
+library(reticulate)
+```
+
+### Mosaic model
+The mosaic model is best to run on protein sequences as the alignments will be more interpretable. (It will also be more efficient as the algorithm complexity is of order $N^2 l^2$ ??). Furthermore, we only want to compare isolates with isolates from other regions. Thus we remove lab isolates and those sequences that can not be translated. We say a sequence can be translated if the resulting protein sequence has no stop codons.In summary, we aim to find representative protein sequences for each DBLa type, and then as a standard input fit in jumping hidden markov models.
+
+
+### Step 1. Identify DNA sequences that can be succesfully translated into proteins.
+
+```{python, eval=FALSE, include=FALSE}
+from mungo.sequence import sixFrameTranslation
+from mungo.fasta import FastaReader
+import os, sys
+from collections import defaultdict
+
+num_stops = 0
+badSeqs = 0
+bad_lengths = []
+
+inputfile = "/Users/fengqian/Downloads/UniMelb_shared-master/project/data/pilot_upper.fasta"
+output_file = "/Users/fengqian/Downloads/UniMelb_shared-master/project/mosaic_data/Protein_pilot_upper.fasta"
+
+with open(output_file + "_BadSeqs", 'w') as badfile:
+    with open(output_file, 'w') as outfile:
+        for h,s in FastaReader(inputfile):
+            stops = 9999
+            translation = sixFrameTranslation(s)
+            for frame in translation:
+                st = translation[frame].count('*')
+                if st < stops:
+                    best = frame
+                    stops = st
+            if stops <= num_stops:
+                outfile.write(">" + h + " frame_" + str(best) + "\n")
+                outfile.write(translation[best] + "\n")
+            else:
+                badSeqs = badSeqs + 1
+                bad_lengths.append(len(s))
+                badfile.write(">" + h + "\n")
+                badfile.write(s + "\n")
+            seqCount = seqCount+1
+```
+
+Overall, 34374 out of 35591 DNA sequences (96.58%) are translated successfully.
+
+
+### Step 2.  Create filtered DNA sequence file for clustering
+
+```{python, eval=FALSE, include=FALSE}
+from mungo.fasta import FastaReader
+
+keep=set()
+
+for h,s in FastaReader("/Users/fengqian/Downloads/UniMelb_shared-master/project/mosaic_data/Protein_pilot_upper.fasta"):
+    keep.add(h.split()[0])
+#Create filtered DNA sequence file for clustering
+with open("/Users/fengqian/Downloads/UniMelb_shared-master/project/mosaic_data/DNA_translateable_pilot_upper.fasta", 'w') as outfile:
+    for h,s in FastaReader("/Users/fengqian/Downloads/UniMelb_shared-master/project/data/pilot_upper.fasta"):
+        if h in keep:
+            outfile.write(">"+h+"\n"+s+"\n")
+```
+As a consequence, 34374 DNA sequences are obtained, they are translateable.
+
+
+### Step 3.  Centroid these DNA sequences.
+This step is same with previous one when generating OTU table by USEARCH with 96% identity.Therefore, we continue use python script called clusterDBLa.py directly.
+```{bash, eval=FALSE}
+cd
+python /Users/fengqian/Downloads/UniMelb_shared-master/project/scripts/clusterDBLa.py -o /Users/fengqian/Downloads/UniMelb_shared-master/project/mosaic_data/ -r /Users/fengqian/Downloads/UniMelb_shared-master/project/mosaic_data/DNA_translateable_pilot_upper.fasta
+```
+
+17335 centroid sequences are obtained, appraently, there is a significant drop from 34374 DNA sequences. Each DNA sequence is corresponded with one protein sequence with no codon noted as ``*".
+
+
+### Step 4. Extract the protein sequences corresponded with centroid DNA sequences.
+```{python, eval=FALSE, include=FALSE}
+from mungo.fasta import FastaReader
+
+centroids=set()
+for h,s in FastaReader("/Users/fengqian/Downloads/UniMelb_shared-master/project/mosaic_data/DNA_translateable_pilot_upper_renamed_centroids.fasta"):
+    centroids.add(h.split(";sample=")[0])
+
+with open("/Users/fengqian/Downloads/UniMelb_shared-master/project/mosaic_data/Protein_translateable_pilot_upper_centroids.fasta", 'w') as outfile:
+    for h,s in FastaReader("/Users/fengqian/Downloads/UniMelb_shared-master/project/mosaic_data/Protein_pilot_upper.fasta"):
+        if h.split()[0] in centroids:
+            outfile.write(">"+h+"\n"+s+"\n")
+```
+
+As a result, 17335 protein sequences are obtained.
+The final number of protein sequences which are used in JPHMM model is 17335. Keep this number in mind. 
+
+
+
