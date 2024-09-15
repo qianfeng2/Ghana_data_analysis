@@ -27,3 +27,7 @@ Scripts and data for reproducing the "Analysis of DBLα tags from a cross-sectio
 - Scripts for running JHMM and collecting JHMM paramters are in scripts/R_scripts/run_JHMM folder.
 
 - The mosaic representations of Ghana pilot data are stored in mosaic_processed_data/results_final_alignment folder.
+
+
+### Reference
+- Tonkin-Hill G, Ruybal-Pesántez S, Tiedje KE, Rougeron V, Duffy MF, Zakeri S,et al. Evolutionary analyses of the major variant surface antigen-encoding genesreveal population structure of *Plasmodium falciparum* within and between continents. PLoS Genetics. 2021;17(2):e1009269.
